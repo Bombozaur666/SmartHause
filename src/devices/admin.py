@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import Devices, Room, House, Producers
 
-# Register your models here.
+admin.site.register(Devices)
+admin.site.register(Room)
+admin.site.register(House)
+admin.site.register(Producers)
