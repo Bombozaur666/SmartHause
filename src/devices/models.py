@@ -23,6 +23,8 @@ class Room(models.Model):
         return self.name
 
 
+
+
 class House(models.Model):
     POZNAN = 'poz'
     NOWHERE = 'now'
@@ -39,6 +41,7 @@ class House(models.Model):
         (RZECZYPOSPOLITEJ, 'os. Rzeczypospolitej'),
         (NOWHERE, 'Nowhere')
     )
+
     name = models.CharField(unique=True)
 
     city = models.CharField(choices=CITIES_CHOICES)
