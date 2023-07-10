@@ -1,4 +1,8 @@
 version: '3.9'
+networks:
+  lan_access:
+    driver: bridge
+
 services:
   db:
     image: postgres:15.1-alpine
@@ -8,10 +12,14 @@ services:
     volumes:
       - ./db:/var/lib/postgresql/data
     container_name: postgres
+    ports:
+      - '5432:5432'
 
   redis:
     image: "redis:alpine"
     container_name: redis
+    ports:
+      - "6379:6379"
 
   django:
     restart: unless-stopped
@@ -49,6 +57,10 @@ services:
       - ./env/cache.env
       - ./env/celery.env
     container_name: celery-worker
+    networks:
+      - lan_access
+      - default
+
 
   celery-beat:
     restart: unless-stopped
@@ -66,3 +78,5 @@ services:
       - ./env/cache.env
       - ./env/celery.env
     container_name: celery-beat
+
+
