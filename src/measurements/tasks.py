@@ -7,21 +7,14 @@ from httpx import Client, Timeout
 from asgiref.sync import async_to_sync
 
 
-async def wrapper():
+@shared_task(serializer='json', name="temp_and_humidity_task")
+def temp_and_humidity(*args, **kwargs):
     bulk_save = []
     time_now = datetime.now()
     devices = Devices.objects.filter(active=True,
                                      type=Devices.THERMAL_AND_HUMIDITY)
-    timeout = Timeout(1.0)
-    async for device in devices:
-        with Client() as client:
-            response = client.get(f'{device.protocol}://{device.ip_address}:{device.port}/state/extended')
-            print(response)
-            bulk_save.append(response.json())
-    return await bulk_save
-
-
-@shared_task(serializer='json', name="temp_and_humidity_task")
-def temp_and_humidity(*args, **kwargs):
-    bulk = async_to_sync(wrapper)()
-    return bulk
+    with Client() as client:
+        for device in devices:
+            response = client.get(f'{device.protocol}://{device.ip_address}:{device.port}/state')
+            bulk_save.append(response.content)
+    return {'state': bulk_save}

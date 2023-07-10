@@ -43,6 +43,7 @@ services:
 
   celery-worker:
     restart: unless-stopped
+    tty: false
     build:
       context: .
       dockerfile: dockerfiles/django.dockerfile

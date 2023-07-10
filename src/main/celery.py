@@ -22,6 +22,6 @@ app.autodiscover_tasks()
 app.conf.beat_schedule = {
     'temp_and_humidity': {
         'task': 'temp_and_humidity_task',
-        'schedule': 50,
+        'schedule': 10,
     },
 }
