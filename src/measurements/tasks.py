@@ -3,7 +3,7 @@ from celery import shared_task
 from devices.models import Devices
 from results.models import HumidityResults, TempResults
 from datetime import datetime
-from httpx import AsyncClient, Timeout
+from httpx import AsyncClient, TimeoutException
 from asgiref.sync import async_to_sync
 
 
@@ -16,20 +16,24 @@ async def async_temp_and_humidity():
                                      type=Devices.THERMAL_AND_HUMIDITY)
     async with AsyncClient() as client:
         async for device in devices:
-            response = await client.get(f'{device.protocol}://{device.ip_address}:{device.port}/state/extended')
-            result = response.json()
-            content.append(result)
-            temp = TempResults(device=device,
-                               created=time_now,
-                               temp_value=result['multiSensor']['sensors'][1]['value'],
-                               heat_index=result['multiSensor']['sensors'][4]['value'],
-                               )
-            hum = HumidityResults(device=device,
-                                  created=time_now,
-                                  humidity=result['multiSensor']['sensors'][0]['value'],
-                                  absolute_humidity=result['multiSensor']['sensors'][2]['value'], )
-            bulk_temperature.append(temp)
-            bulk_humidity.append(hum)
+            try:
+                response = await client.get(f'{device.protocol}://{device.ip_address}:{device.port}/state',
+                                            timeout=1)
+                result = response.json()
+                content.append(result)
+                temp = TempResults(device=device,
+                                   created=time_now,
+                                   temp_value=result['multiSensor']['sensors'][1]['value'],
+                                   heat_index=result['multiSensor']['sensors'][4]['value'],
+                                   )
+                hum = HumidityResults(device=device,
+                                      created=time_now,
+                                      humidity=result['multiSensor']['sensors'][0]['value'],
+                                      absolute_humidity=result['multiSensor']['sensors'][2]['value'], )
+                bulk_temperature.append(temp)
+                bulk_humidity.append(hum)
+            except TimeoutException:
+                pass
 
     await TempResults.objects.abulk_create(bulk_temperature)
     await HumidityResults.objects.abulk_create(bulk_humidity)
