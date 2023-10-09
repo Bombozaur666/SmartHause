@@ -1,14 +1,6 @@
-from .models import Devices, Producers, House, Address, Room, City
+from .models import Devices, Producers, House, Address,  City
 from rest_framework.serializers import ModelSerializer
 
-
-class RoomSerializer(ModelSerializer):
-    class Meta:
-        model = Room
-        fields = [
-            'id',
-            'name'
-        ]
 
 
 class CitySerializer(ModelSerializer):
@@ -35,7 +27,6 @@ class AddressSerializer(ModelSerializer):
 
 
 class HouseSerializer(ModelSerializer):
-    rooms = RoomSerializer()
     address = AddressSerializer()
 
     class Meta:
@@ -43,7 +34,6 @@ class HouseSerializer(ModelSerializer):
         fields = [
             'id',
             'name',
-            'rooms',
             'address'
         ]
 

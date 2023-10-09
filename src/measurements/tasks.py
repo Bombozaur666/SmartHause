@@ -23,13 +23,14 @@ async def async_temp_and_humidity():
                 content.append(result)
                 temp = TempResults(device=device,
                                    created=time_now,
-                                   temp_value=result['multiSensor']['sensors'][1]['value'],
-                                   heat_index=result['multiSensor']['sensors'][4]['value'],
+                                   temp_value=(result['multiSensor']['sensors'][1]['value']/100),
+                                   heat_index=(result['multiSensor']['sensors'][4]['value']/100),
                                    )
                 hum = HumidityResults(device=device,
                                       created=time_now,
-                                      humidity=result['multiSensor']['sensors'][0]['value'],
-                                      absolute_humidity=result['multiSensor']['sensors'][2]['value'], )
+                                      humidity=(result['multiSensor']['sensors'][0]['value']/100),
+                                      absolute_humidity=(result['multiSensor']['sensors'][2]['value']/100))
+
                 bulk_temperature.append(temp)
                 bulk_humidity.append(hum)
             except TimeoutException:

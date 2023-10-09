@@ -16,12 +16,6 @@ class Producers(models.Model):
         return self.name
 
 
-class Room(models.Model):
-    name = models.CharField()
-
-    def __str__(self):
-        return self.name
-
 
 class City(models.Model):
     name = models.CharField()
@@ -50,8 +44,6 @@ class Address(models.Model):
 
 class House(models.Model):
     name = models.CharField(unique=True)
-
-    rooms = models.ManyToManyField(Room)
 
     address = models.ForeignKey(Address, on_delete=models.DO_NOTHING)
 
