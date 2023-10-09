@@ -14,9 +14,9 @@ class BaseResult(models.Model):
 
 
 class TempResults(BaseResult):
-    temp_value = models.IntegerField()
+    temp_value = models.FloatField()
 
-    heat_index = models.IntegerField(null=True,
+    heat_index = models.FloatField(null=True,
                                      blank=True)
 
     def __str__(self):
@@ -24,8 +24,8 @@ class TempResults(BaseResult):
 
 
 class HumidityResults(BaseResult):
-    humidity = models.IntegerField()
-    absolute_humidity = models.IntegerField()
+    humidity = models.FloatField()
+    absolute_humidity = models.FloatField()
 
     def __str__(self):
         return f"{self.device.name} at {self.created}"

@@ -59,7 +59,6 @@ class House(models.Model):
         return self.name
 
 
-
 class Devices(models.Model):
     THERMAL = 'the'
     HUMIDITY = 'hum'
