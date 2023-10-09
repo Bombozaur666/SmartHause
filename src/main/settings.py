@@ -159,12 +159,12 @@ CELERY_TRACK_STARTED = os.environ['CELERY_TRACK_STARTED']
 CELERY_RESULT_BACKEND = os.environ['CELERY_RESULT_BACKEND']
 CELERY_CACHE_BACKEND = os.environ['CELERY_CACHE_BACKEND']
 
-
+os.environ['POSTGRES_USER']
 CORS_ALLOW_ALL_ORIGINS = True # If this is used then `CORS_ALLOWED_ORIGINS` will not have any effect
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:4200',
+    f'{os.environ["CORS_API"]}',
 ] # If this is used, then not need to use `CORS_ALLOW_ALL_ORIGINS = True`
 CORS_ALLOWED_ORIGIN_REGEXES = [
-    'http://localhost:4200',
+    f'{os.environ["CORS_API"]}',
 ]
