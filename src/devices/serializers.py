@@ -1,4 +1,4 @@
-from .models import Devices, Producers, House, Address,  City
+from .models import Devices, Producers, House, Address,  City, TempResults, HumidityResults
 from rest_framework.serializers import ModelSerializer
 
 
@@ -68,3 +68,19 @@ class DeviceSerializer(ModelSerializer):
             'port',
             'protocol'
         ]
+
+
+class TempSerializer(ModelSerializer):
+    device = DeviceSerializer
+
+    class Meta:
+        model = TempResults
+        fields = ['id', 'device', 'created', 'temp_value', 'heat_index']
+
+
+class HumiSerializer(ModelSerializer):
+    device = DeviceSerializer
+
+    class Meta:
+        model = HumidityResults
+        fields = ['id', 'device', 'created', 'humidity', 'absolute_humidity']

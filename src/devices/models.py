@@ -16,7 +16,6 @@ class Producers(models.Model):
         return self.name
 
 
-
 class City(models.Model):
     name = models.CharField()
 
@@ -92,3 +91,31 @@ class Devices(models.Model):
 
     class Meta:
         ordering = ('type',)
+
+
+class BaseResult(models.Model):
+    device = models.ForeignKey(Devices,
+                               on_delete=models.DO_NOTHING)
+
+    created = models.DateTimeField()
+
+    class Meta:
+        abstract = True
+
+
+class TempResults(BaseResult):
+    temp_value = models.FloatField()
+
+    heat_index = models.FloatField(null=True,
+                                   blank=True)
+
+    def __str__(self):
+        return f"{self.device.name} at {self.created}"
+
+
+class HumidityResults(BaseResult):
+    humidity = models.FloatField()
+    absolute_humidity = models.FloatField()
+
+    def __str__(self):
+        return f"{self.device.name} at {self.created}"

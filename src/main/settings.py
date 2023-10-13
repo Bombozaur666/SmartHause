@@ -43,10 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_celery_results',
     'corsheaders',
-    'measurements',
     'accounts',
     'devices',
-    'results',
 ]
 
 

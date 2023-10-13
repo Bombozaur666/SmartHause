@@ -1,7 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 from celery import shared_task
-from devices.models import Devices
-from results.models import HumidityResults, TempResults
+from devices.models import Devices, HumidityResults, TempResults
 from datetime import datetime
 from httpx import AsyncClient, TimeoutException
 from asgiref.sync import async_to_sync
