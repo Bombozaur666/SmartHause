@@ -11,27 +11,46 @@ async def async_temp_and_humidity():
     bulk_humidity = []
     content = []
     time_now = datetime.now()
-    devices = Devices.objects.filter(active=True,
-                                     type=Devices.THERMAL_AND_HUMIDITY)
+    devices = Devices.objects.filter(active=True)
     async with AsyncClient() as client:
         async for device in devices:
             try:
                 response = await client.get(f'{device.protocol}://{device.ip_address}:{device.port}/state',
-                                            timeout=1)
+                                            timeout=10)
                 result = response.json()
                 content.append(result)
-                temp = TempResults(device=device,
-                                   created=time_now,
-                                   temp_value=(result['multiSensor']['sensors'][1]['value']/100),
-                                   heat_index=(result['multiSensor']['sensors'][4]['value']/100),
-                                   )
-                hum = HumidityResults(device=device,
-                                      created=time_now,
-                                      humidity=(result['multiSensor']['sensors'][0]['value']/100),
-                                      absolute_humidity=(result['multiSensor']['sensors'][2]['value']/100))
 
-                bulk_temperature.append(temp)
-                bulk_humidity.append(hum)
+                # IF DEVICE HAVE BOTH THERMAL AND HUMIDITY SENSORS
+                if device.type == Devices.THERMAL_AND_HUMIDITY:
+                    temp = TempResults(device=device,
+                                       created=time_now,
+                                       temp_value=(result['multiSensor']['sensors'][1]['value']/100),
+                                       heat_index=(result['multiSensor']['sensors'][4]['value']/100),
+                                       )
+                    hum = HumidityResults(device=device,
+                                          created=time_now,
+                                          humidity=(result['multiSensor']['sensors'][0]['value']/100),
+                                          absolute_humidity=(result['multiSensor']['sensors'][2]['value']/100))
+                    bulk_humidity.append(hum)
+                    bulk_temperature.append(temp)
+
+                # IF DEVICE HAVE THERMAL SENSOR
+                if device.type == Devices.THERMAL:
+                    temp = TempResults(device=device,
+                                       created=time_now,
+                                       temp_value=(result['multiSensor']['sensors'][1]['value'] / 100),
+                                       heat_index=(result['multiSensor']['sensors'][4]['value'] / 100),
+                                       )
+                    bulk_temperature.append(temp)
+
+                # IF DEVICE HAVE HUMIDITY SENSOR
+                if device.type == Devices.HUMIDITY:
+                    hum = HumidityResults(device=device,
+                                          created=time_now,
+                                          humidity=(result['multiSensor']['sensors'][0]['value'] / 100),
+                                          absolute_humidity=(result['multiSensor']['sensors'][2]['value'] / 100))
+                    bulk_humidity.append(hum)
+
             except TimeoutException:
                 pass
 
