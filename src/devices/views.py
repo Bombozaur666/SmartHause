@@ -24,7 +24,7 @@ class Results(generics.GenericAPIView):
             serializer_humidity = HumiSerializer(results_humidity)
             serializer_temp = TempSerializer(results_temp)
             return Response(
-            {'temp': serializer_temp.data,
+                {'temp': serializer_temp.data,
                  'humidity': serializer_humidity.data},
                 status=status.HTTP_200_OK)
         else:
