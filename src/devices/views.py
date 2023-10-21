@@ -16,15 +16,15 @@ class DeviceListActive(generics.ListAPIView):
 
 
 class Results(generics.GenericAPIView):
-    def get(self, request, id):
-        device = get_object_or_404(Devices, id=id)
-        if device.active == True:
-            results_humidity = get_list_or_404(HumidityResults, device__id=id)
-            results_temp = get_list_or_404(TempResults, device__id=id)
-            serializer_humidity = HumiSerializer(results_humidity)
-            serializer_temp = TempSerializer(results_temp)
+    def get(self, request, pk):
+        device = get_object_or_404(Devices, id=pk)
+        if device.active:
+            results_humidity = get_list_or_404(HumidityResults, device__pk=device.pk)
+            results_temperature = get_list_or_404(TempResults, device__pk=device.pk)
+            serializer_humidity = HumiSerializer(results_humidity, many=True)
+            serializer_temperature = TempSerializer(results_temperature, many=True)
             return Response(
-                {'temp': serializer_temp.data,
+                {'temperature': serializer_temperature.data,
                  'humidity': serializer_humidity.data},
                 status=status.HTTP_200_OK)
         else:
