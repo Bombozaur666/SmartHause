@@ -51,13 +51,9 @@ class House(models.Model):
 
 
 class Devices(models.Model):
-    THERMAL = 'the'
-    HUMIDITY = 'hum'
     THERMAL_AND_HUMIDITY = 'tah'
 
     TYPES_CHOICES = (
-        (THERMAL, 'Thermal'),
-        (HUMIDITY, 'Humidity'),
         (THERMAL_AND_HUMIDITY, 'Thermal and Humidity'),
     )
 

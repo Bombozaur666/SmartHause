@@ -16,17 +16,16 @@ class DeviceListActive(generics.ListAPIView):
 
 
 class Results(generics.GenericAPIView):
-    def get(self, request, id, type_of):
+    def get(self, request, id):
         device = get_object_or_404(Devices, id=id)
-        if type_of == Devices.THERMAL:
-            results = get_list_or_404(TempResults, device__id=id)
-            serializer = TempSerializer(results)
-            return Response(serializer.data,
-                            status=status.HTTP_200_OK)
-        elif type_of == Devices.HUMIDITY:
-            results = get_list_or_404(HumidityResults, device__id=id)
-            serializer = HumiSerializer(results)
-            return Response(serializer.data,
-                            status=status.HTTP_200_OK)
+        if device.active == True:
+            results_humidity = get_list_or_404(HumidityResults, device__id=id)
+            results_temp = get_list_or_404(TempResults, device__id=id)
+            serializer_humidity = HumiSerializer(results_humidity)
+            serializer_temp = TempSerializer(results_temp)
+            return Response(
+            {'temp': serializer_temp.data,
+                 'humidity': serializer_humidity.data},
+                status=status.HTTP_200_OK)
         else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(status.HTTP_403_FORBIDDEN)
