@@ -29,3 +29,10 @@ class Results(generics.GenericAPIView):
                 status=status.HTTP_200_OK)
         else:
             return Response(status.HTTP_403_FORBIDDEN)
+
+
+class RemoveDevice(generics.GenericAPIView):
+    def delete(self, request, pk):
+        device = get_object_or_404(Devices, id=pk)
+        device.delete()
+        return Response(status=status.HTTP_200_OK)

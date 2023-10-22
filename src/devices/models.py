@@ -91,7 +91,7 @@ class Devices(models.Model):
 
 class BaseResult(models.Model):
     device = models.ForeignKey(Devices,
-                               on_delete=models.DO_NOTHING)
+                               on_delete=models.CASCADE)
 
     created = models.DateTimeField()
 
