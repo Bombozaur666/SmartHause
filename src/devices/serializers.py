@@ -1,6 +1,6 @@
 from .models import Devices, Producers, TempResults, HumidityResults
 from rest_framework.serializers import ModelSerializer
-from ..houses.serializers import HouseSerializer
+from houses.serializers import HouseSerializer
 
 
 class ProducersSerializer(ModelSerializer):
