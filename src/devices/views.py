@@ -33,6 +33,8 @@ class Results(generics.GenericAPIView):
 
 class RemoveDevice(generics.GenericAPIView):
     def delete(self, request, pk):
+        print(f'pk: {pk}')
         device = get_object_or_404(Devices, id=pk)
+        print(f'device: {device}')
         device.delete()
         return Response(status=status.HTTP_200_OK)

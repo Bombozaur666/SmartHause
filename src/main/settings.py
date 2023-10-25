@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'accounts',
     'devices',
+    'houses',
+    'producers'
 ]
 
 
@@ -59,7 +61,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'main.urls'
+ROOT_URLCONF = 'main.urls.py'
 
 TEMPLATES = [
     {
