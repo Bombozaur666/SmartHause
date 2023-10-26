@@ -1,18 +1,8 @@
 from .models import Devices, Producers, TempResults, HumidityResults
 from rest_framework.serializers import ModelSerializer
 from houses.serializers import HouseSerializer
+from producers.serializers import ProducersSerializer
 
-
-class ProducersSerializer(ModelSerializer):
-    class Meta:
-        model = Producers
-        fields = [
-            'id',
-            'name',
-            'active',
-            'website',
-            'comment'
-        ]
 
 
 class DeviceSerializer(ModelSerializer):

@@ -1,19 +1,10 @@
 from django.db import models
 from django.core.validators import RegexValidator
 from houses.models import House
+from producers.models import Producers
 
 # Create your models here.
 
-class Producers(models.Model):
-    name = models.CharField()
-    active = models.BooleanField(default=False)
-    website = models.URLField(blank=True,
-                              null=True)
-    comment = models.TextField(blank=True,
-                               null=True)
-
-    def __str__(self):
-        return self.name
 
 
 
